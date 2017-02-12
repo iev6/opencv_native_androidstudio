@@ -117,7 +117,9 @@ void wallFill(Mat src, Mat wall, Mat mask, Mat & dst) {
     bitwise_and(wall, wall, m2, mask);
 
     m3 = m1 + m2;
-    bilateralFilter(m3, dst, 3, 0.5, 0.5);
+//bilateralFilter(m3, dst, 3, 0.5, 0.5);
+
+    GaussianBlur(m3,dst,Size(3,3),0.5);
 }
 
 /**
@@ -209,7 +211,7 @@ void JNICALL Java_ch_hepia_iti_opencvnativeandroidstudio_MainActivity_salt(JNIEn
     Mat &mGr = *(Mat *) matAddrGray;
     cvtColor(mGr,mGr,COLOR_RGBA2RGB);
     Mat mgr;
-    resize(mGr,mgr,Size(0),0.25,0.25);
+    resize(mGr,mgr,Size(0,0),0.25,0.25);
     Scalar color(255,0,0);
     int pts_arr1[1][2];
     Mat markersOrig = initMarkers(mgr);
@@ -217,6 +219,7 @@ void JNICALL Java_ch_hepia_iti_opencvnativeandroidstudio_MainActivity_salt(JNIEn
     pts_arr1[0][1] = (int) mgr.cols/2.0;
     Mat &opt = *(Mat *) optaddr;
     opt = wallFillColor(mgr,pts_arr1,1,markersOrig,color);
+    resize(opt,opt,mGr.size());
     //opt = mGr;
 
 
